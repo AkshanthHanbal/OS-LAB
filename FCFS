@@ -1,0 +1,56 @@
+#include<stdio.h>
+
+int main() {
+    int cmpt[20], tat[20], wt[20], pname[20], temp;
+    float awt = 0, atat = 0;
+    int sum = 0, n;
+
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    int at[n], cput[n];
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter the arrival time and CPU time for process P%d: ", i);
+        scanf("%d%d", &at[i], &cput[i]);
+        pname[i] = i;
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (at[j] == at[j + 1] && cput[j] > cput[j + 1]) {
+                temp = cput[j];
+                cput[j] = cput[j + 1];
+                cput[j + 1] = temp;
+                temp = pname[j];
+                pname[j] = pname[j + 1];
+                pname[j + 1] = temp;
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        sum += cput[i];
+        cmpt[i] = sum;
+        tat[i] = cmpt[i] - at[i];
+        wt[i] = tat[i] - cput[i];
+    }
+
+    for (int i = 0; i < n; i++) {
+        awt += wt[i];
+        atat += tat[i];
+    }
+
+    awt = awt / n;
+    atat = atat / n;
+
+    printf("\t PROCESS \tARRIVAL TIME \tCPU TIME \t WAITING TIME\t TURNAROUND TIME\n");
+    for (int i = 0; i < n; i++) {
+        printf("\n\t P%d \t\t %d \t\t %d \t\t %d \t\t %d", pname[i], at[i], cput[i], wt[i], tat[i]);
+    }
+
+    printf("\nAverage Waiting Time -- %f", awt);
+    printf("\nAverage Turnaround Time -- %f\n", atat);
+
+    return 0;
+}
